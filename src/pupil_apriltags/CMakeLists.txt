@@ -1,5 +1,5 @@
 project(apriltag-python-bindings)
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.5)
 
 set(CMAKE_JOB_POOL_COMPILE:STRING compile)
 set(CMAKE_JOB_POOL_LINK:STRING link)
