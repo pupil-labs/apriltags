@@ -8,16 +8,19 @@ import pupil_pthreads_win
 
 def repair(wheel, dest_dir):
     pthreads_path = pupil_pthreads_win.dll_path
-    msvcr100_path = r"C:\WINDOWS\system32\MSVCR100.dll"
+    msvcr100_path = pathlib.Path(r"C:\WINDOWS\system32\MSVCR100.dll")
     cmd = (
         "delvewheel.exe repair -v -w {dest_dir} {wheel} "
-        "--add-dll {pthreads_path};{msvcr100_path}"
+        "--add-path {pthreads_path};{msvcr100_path} "
+        "--add-dll {pthreads_name};{msvcr100_name}"
     )
     cmd = cmd.format(
         wheel=wheel,
         dest_dir=dest_dir,
-        pthreads_path=pthreads_path,
-        msvcr100_path=msvcr100_path,
+        pthreads_path=pthreads_path.parent,
+        msvcr100_path=msvcr100_path.parent,
+        pthreads_name=pupil_pthreads_win.dll_path.name,
+        msvcr100_name=msvcr100_path.name,
     )
     out = subprocess.check_output(cmd, shell=True).decode()
     print("+ " + cmd)
@@ -32,7 +35,7 @@ def repair(wheel, dest_dir):
         shutil.copy2(wheel, dest_dir)
         # raise Exception("Should not happen")
     else:
-        print(f"+ No need for a manual copy")
+        print("+ No need for a manual copy")
 
 
 if __name__ == "__main__":
