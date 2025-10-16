@@ -455,7 +455,7 @@ class Detector:
         estimate_tag_pose: bool = False,
         camera_params: Optional[Tuple[float, float, float, float]] = None,
         tag_size: Optional[float] = None,
-    ) -> Detection:
+    ) -> List[Detection]:
         """Run detectons on the provided image.
 
         The image must be a grayscale image of type ``numpy.uint8``.
