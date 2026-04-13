@@ -1,7 +1,7 @@
 [build-system]
 requires = [
     "setuptools>=56",
-    "setuptools_scm[toml]>=3.4.1",
+    "setuptools_scm[toml]>=10.0.5",
     "wheel",
     "scikit-build",
     "Cython",
