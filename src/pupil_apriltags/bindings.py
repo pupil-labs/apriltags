@@ -418,6 +418,14 @@ class Detector:
 
     def __del__(self):
         if self.tag_detector_ptr is not None:
+            # destroy the detector first, since apriltag_detector_destroy() calls
+            # apriltag_detector_clear_families() which dereferences the registered
+            # tag family structs. Freeing the families before this point can lead
+            # to a use-after-free segfault at shutdown.
+            self.libc.apriltag_detector_destroy.restype = None
+            self.libc.apriltag_detector_destroy(self.tag_detector_ptr)
+            self.tag_detector_ptr = None
+
             # destroy the tag families
             for family, tf in self.tag_families.items():
                 if "tag16h5" == family:
@@ -445,9 +453,7 @@ class Detector:
                     self.libc.tagStandard52h13_destroy.restype = None
                     self.libc.tagStandard52h13_destroy(tf)
 
-            # destroy the detector
-            self.libc.apriltag_detector_destroy.restype = None
-            self.libc.apriltag_detector_destroy(self.tag_detector_ptr)
+            self.tag_families = {}
 
     def detect(
         self,
